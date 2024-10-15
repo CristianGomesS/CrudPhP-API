@@ -13,9 +13,9 @@ class Book extends Model
     
     protected $fillable=[
         'titulo',
-        'autor',
-        'qtd_paginas',
-        'editora',
+        'author_id',
+        'details_id',
+        'publisher-id',
         'is_delete'
     ];
 }

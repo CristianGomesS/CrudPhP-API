@@ -20,10 +20,10 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call(AuthorSeeder::class);
-        $this->call(BookSeeder::class);
         $this->call(BookDetailsSeeder::class);
         $this->call(PublisherSeeder::class);
-
-
+        $this->call(CategorySeeder::class);
+        $this->call(BookSeeder::class);
+        $this->call(CategoryBookSeeder::class);
     }
 }

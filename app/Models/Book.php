@@ -13,9 +13,9 @@ class Book extends Model
     
     protected $fillable=[
         'titulo',
+        'publisher_id',
         'author_id',
-        'details_id',
-        'publisher-id',
+        'book_details_id',
         'is_delete'
     ];
 }

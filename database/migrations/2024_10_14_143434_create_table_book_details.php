@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('summary')->nullable();
             $table->integer('page_count');
             $table->string('edition')->nullable();
+            $table ->boolean('is_delete')->default(0);
         });
     }
 

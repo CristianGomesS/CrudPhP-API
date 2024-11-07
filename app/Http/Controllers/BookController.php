@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Services\ServiceBook;
+use App\Services\ServiceCategoryBook;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redis;
-use PhpParser\Node\Stmt\Return_;
 
 class BookController extends Controller
 {
@@ -19,6 +18,7 @@ class BookController extends Controller
 
     public function index()
     {
+
         $book = $this->bookService->getAllBooks();
         return    response()->json($book, 200);
     }
@@ -26,17 +26,26 @@ class BookController extends Controller
     public function store(Request $request)
     {
         // Validação dos dados
-        $data = $request->validate([
+        /*   $data = $request->validate([
             'titulo' => 'required|string|max:255',
-            'autor' => 'required|string|max:255',
-            'qtd_paginas' => 'required|integer',
-            'editora' => 'required|string|max:255',
-        ]);
+            'publisher_id' => 'nullable|integer',
+            'author_id' => 'nullable|integer',
+            'book_details_id' => 'nullable', 
+        ]); */
+        $data = $request->all(); // Ou use $request->only(['titulo', 'publisher_id', 'author_id', 'book_details_id']);
+
+        // Teste para ver o conteúdo da variável $categories
+        $categories = $request->input('category');
 
         // Chama o serviço para criar o livro
         $book = $this->bookService->createBook($data);
-
         if ($book) {
+            if (is_array($categories) && !empty($categories)) {
+                // Verifique o conteúdo de $categories
+
+                $book->category()->attach($categories);
+            }
+
             return response()->json(['message' => 'Livro criado com sucesso'], 201);  // HTTP 201: Created
         }
 
@@ -44,30 +53,48 @@ class BookController extends Controller
     }
     public function show($id)
     {
-        return $this->bookService->detailBook($id);
+        return $this->bookService->findBookById($id);
     }
 
-    public function update(Request $request, $id)
+    public function update($id, Request $request)
     {
-        $book = $this->bookService->detailBook($id);
-       
-        $data = $request->all();
-
-        if ($book) {
-
-        $this->bookService->updateBook($book, $data);
-        return response()->json(['message' => 'Livro Atualizado com sucesso'], 201);  // HTTP 201: Created
+        $book = $this->bookService->findBookById($id);
+        
+        if (!$book) {
+            return response()->json(['message' => 'Livro não encontrado'], 404);  // HTTP 404: Not Found
         }
-        return response()->json(['message' => 'Livro não encontrado'], 404);  // HTTP 500: Internal Server Error
+        $data = $request->all();
+        /* com a validação dos canpos nao ta funcionando ainda nao sei o PQ  
+        $data = $request->validate([
+        'titulo' => 'sometimes|string|max:255',
+        'publisher_id' => 'nullable|integer',
+        'author_id' => 'nullable|integer',
+        'book_details_id' => 'nullable',
+         ]); */
+
+        $categories = $request->input('category');
+
+        // Chama o serviço para criar o livro
+        $updated  = $this->bookService->updateBook($book, $data);
+        if ($updated) {
+            if (is_array($categories) && !empty($categories)) {
+                // Verifique o conteúdo de $categories
+
+                $book->category()->sync($categories);
+               
+                return response()->json($book, 200);
+            }
+            // HTTP 500: Internal Server Error
+        }
     }
     public function destroy($book)
     {
         // Encontra o livro
-        $book = $this->bookService->detailBook($book);
+        $book = $this->bookService->findBookById($book);
         $this->bookService->deleteBook($book);  // Deleta o livro chamando o serviço
         if ($book->is_delete == 0) {
-            return response()->json(['message' => 'Livro Restaurado'], 200);
-        }else {
+            
+        } else {
             return response()->json(['message' => 'Livro excluido com suceso'], 200);
         }
     }

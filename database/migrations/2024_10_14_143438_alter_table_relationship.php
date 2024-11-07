@@ -17,6 +17,7 @@ return new class extends Migration
         Schema::create('category_book', function (Blueprint $table) {
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('book_id');
+            $table->timestamps();
 
                 //Constraint
             $table-> foreign('category_id')-> references('id')->on('category');
@@ -42,30 +43,6 @@ return new class extends Migration
 
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    /* public function down(): void
-    {
-        Schema::table('author',function (Blueprint $table){
-            $table->dropForeign('author_book_id_foreign');
-            $table->dropColumn('book_id');
-
-        });
-
-    Schema::table('publisher',function (Blueprint $table){
-            $table->dropForeign('publisher_book_id_foreign');
-            $table->dropColumn('book_id');
-
-        });
-           
-        Schema::table('category_book',function (Blueprint $table){
-            $table->dropForeign('category_book_book_id_foreign');  //nome da chave [tabela]_[coluna]_foreign
-            $table->dropForeign('category_book_category_id_foreign');
-        });
-        Schema::dropIfExists('category_book');
-    }
-}; */
 public function down(): void
 {
     Schema::table('books', function (Blueprint $table) {
@@ -90,3 +67,6 @@ public function down(): void
     Schema::dropIfExists('category_book');
 }
 };
+
+
+

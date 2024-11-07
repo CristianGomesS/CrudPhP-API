@@ -33,7 +33,7 @@ class ServiceBook
         return $this->bookRepository->delete($book);
 
     }
-    public function detailBook($id)
+    public function findBookById($id)
     {
         return $this->bookRepository->find($id);
     }

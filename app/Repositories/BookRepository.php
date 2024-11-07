@@ -3,37 +3,54 @@
 namespace App\Repositories;
 
 use App\Models\Book;
+use App\Models\Category;
 use PHPUnit\Framework\MockObject\Stub\ReturnReference;
 
 class BookRepository
 {
-    protected $bookRepository;
+    protected $bookModel;
 
     public function __construct(Book $model)
     {
-        $this->bookRepository = $model;
+        $this->bookModel = $model;
     }
 
     public function getAll()
     {
-        $books = Book::where('is_delete', 0)->get();
-        return $books;
+       /*  $books = Book::where('is_delete', 0)->get();
+        return $books; */
+       /*  Book::with('author')->get(); */
+        
+       try {
+            return Book::where('is_delete', 0)
+                       ->with(['publisher', 'author', 'bookDetails', 'category'])
+                       ->get();
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Erro ao buscar livros: ' . $e->getMessage()], 500);
+        } 
     }
 
     public function  create($data)
-    {
+    {   
 
-        return $this->bookRepository->create($data);
+        return $this->bookModel->create($data);
     }
     public function find($id)
     {
-        return $this->bookRepository->findOrFail($id);
+        try {
+            return Book::where('id', $id)
+                       ->with(['publisher', 'author', 'bookDetails', 'category'])
+                       ->firstOrFail();
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Erro ao buscar livro: ' . $e->getMessage()], 500);
+        } 
+   
     }
 
     public function delete($book)
     {
         // Encontra o livro, incluindo os que já foram soft deleted
-        // $book = $this->bookRepository->withTrashed()->findOrFail($id);
+        // $book = $this->bookModel->withTrashed()->findOrFail($id);
 
         //$book = Book::findOrFail($book);
         if (is_null($book)) {
@@ -59,7 +76,6 @@ class BookRepository
         if (is_null($book)) {
             return response()->json(['mensagem' => ' livro não existe']);
         }
-
         return $book->update($data);
     }
 }

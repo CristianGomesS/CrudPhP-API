@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\DetailsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,3 +27,4 @@ Route::put('/books/{id}', [BookController::class, 'update']);  // Atualizar um l
 Route::delete('/books/{id}', [BookController::class, 'destroy']);  // Excluir um livro
  */
 Route::resource('books',BookController::class); 
+Route::resource('details',DetailsController::class); 

@@ -16,11 +16,7 @@ class BookRepository
     }
 
     public function getAll()
-    {
-       /*  $books = Book::where('is_delete', 0)->get();
-        return $books; */
-       /*  Book::with('author')->get(); */
-        
+    {   
        try {
             return Book::where('is_delete', 0)
                        ->with(['publisher', 'author', 'bookDetails', 'category'])

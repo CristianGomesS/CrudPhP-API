@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Http\Resources\BookCollection;
+use App\Http\Resources\BookResource;
 use App\Repositories\bookRepository;
 
 class ServiceBook
@@ -15,7 +17,7 @@ class ServiceBook
 
     public function getAllBooks()
     {
-        return $this->bookRepository->getAll();
+        return  new BookCollection($this->bookRepository->getAll());
     }
 
     public function createBook($data)
@@ -35,6 +37,6 @@ class ServiceBook
     }
     public function findBookById($id)
     {
-        return $this->bookRepository->find($id);
+        return  new BookResource($this->bookRepository->find($id));
     }
 }

@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Repositories\BookDetailsRepository;
 
-
 class ServiceBookDetails
 {
     protected $bookDetailsRepository;
@@ -19,7 +18,7 @@ class ServiceBookDetails
         return $this->bookDetailsRepository->getAll();
     }
 
-    public function createBook($data)
+    public function createDetails($data)
     {
         return $this->bookDetailsRepository->create($data);
     }
@@ -29,7 +28,7 @@ class ServiceBookDetails
         return $this->bookDetailsRepository->update($details, $data);
     }
 
-    public function deleteBook($details)
+    public function deleteDetails($details)
     {
         return $this->bookDetailsRepository->delete($details);
 

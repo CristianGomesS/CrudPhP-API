@@ -12,8 +12,5 @@ class Author extends Model
     protected $fillable=[
         'Nome'
     ];
-    public function books()
-    {
-        return $this->hasOne(Book::class);
-    }
+ 
 }

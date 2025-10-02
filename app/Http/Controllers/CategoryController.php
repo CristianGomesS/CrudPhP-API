@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\ServiceBookDetails;
+use App\Services\ServiceCategory;
 use Illuminate\Http\Request;
 
-class DetailsController extends Controller
+class CategoryController extends Controller
 {
-    protected $detailsService;
+    protected $categoryService;
 
-    public function __construct(ServiceBookDetails $serviceDetails)
+    public function __construct(ServiceCategory $categoryService)
     {
-        $this->detailsService = $serviceDetails;
+        $this->categoryService = $categoryService;
     }
     public function index()
     {
-        $details = $this->detailsService->getAllDetails();
+        $details = $this->categoryService->getAllCategory();
         return response()->json($details, 200);
     }
 
@@ -34,23 +34,23 @@ class DetailsController extends Controller
     {
         $data = $request->all();
       
-        $this->detailsService->createDetails($data);
-            return response()->json(['message' => 'Livro criado com sucesso'], 201);
+        $this->categoryService->createCategory($data);
+            return response()->json(['message' => 'Categoria criada com sucesso'], 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show($detailsID)
+    public function show($categoryID)
     {
-        $details =  $this->detailsService->findDetailsById($detailsID);
-        return response()->json($details, 200);
+        $category =  $this->categoryService->findCategoryById($categoryID);
+        return response()->json($category, 200);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit( $details)
+    public function edit( $category)
     {
         //
     }
@@ -60,28 +60,28 @@ class DetailsController extends Controller
      */
     public function update($id, Request $request)
     {
-        $details = $this->detailsService->findDetailsById($id);
+        $category = $this->categoryService->findCategoryById($id);
       
-        if (!$details) {
+        if (!$category) {
             return response()->json(['message' => 'detalhe não encontrado'], 404);  // HTTP 404: Not Found
         }
      
         $data = $request->all();
      
-        // Chama o serviço para criar o livro
-       $this->detailsService->updateDetails($details, $data);
+        // Chama o serviço para criar o livrosro
+       $this->categoryService->updateCategory($category, $data);
         
-        return response()->json($details, 200);
+        return response()->json($category, 200);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy( $detailsID)
+    public function destroy( $categoryID)
     {
-        $details = $this->detailsService->findDetailsById($detailsID);
+        $category = $this->categoryService->findcategoryById($categoryID);
 
-            $this->detailsService->deleteDetails($details);
+            $this->categoryService->deleteBook($category);
 
         return response()->json(['message' => 'Registro deletedo'], 200);
         }

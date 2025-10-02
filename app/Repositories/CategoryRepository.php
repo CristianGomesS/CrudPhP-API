@@ -2,39 +2,39 @@
 
 namespace App\Repositories;
 
-use App\Models\BookDetails;
+use App\Models\Category;
 
 
-class BookDetailsRepository
+class CategoryRepository
 {
-    protected $BookDetailsModel;
+    protected $CategoryModel;
 
-    public function __construct(BookDetails $model)
+    public function __construct(Category $model)
     {
-        $this->BookDetailsModel = $model;
+        $this->CategoryModel = $model;
     }
 
     public function getAll()
     {
         try {
             // Retorna os dados com as colunas solicitadas
-            return BookDetails::where('is_delete', 0)
-                ->get(['id', 'isbn', 'summary', 'page_count', 'edition','is_delete']); // Retorna apenas os dados sem Response
+            return Category::where('is_delete', 0)
+                ->get(['id','category','is_delete']); // Retorna apenas os dados sem Response
         } catch (\Exception $e) {
             // Retorna uma resposta JSON apenas em caso de erro
-            return response()->json(['error' => 'Erro ao buscar detalhes: ' . $e->getMessage()], 500);
+            return response()->json(['error' => 'Erro ao buscar Categoria: ' . $e->getMessage()], 500);
         }
     }
 
     public function  create($data)
     {   
 
-        return $this->BookDetailsModel->create($data);
+        return $this->CategoryModel->create($data);
     }
     public function find($id)
     {
         try {
-            return BookDetails::where('id', $id)
+            return Category::where('id', $id)
                        ->firstOrFail();
         } catch (\Exception $e) {
             return response()->json(['error' => 'Erro ao buscar Detalhe: ' . $e->getMessage()], 500);
@@ -42,35 +42,35 @@ class BookDetailsRepository
    
     }
 
-    public function delete($details)
+    public function delete($Category)
     {
         // Encontra o livro, incluindo os que já foram soft deleted
         // $book = $this->bookModel->withTrashed()->findOrFail($id);
 
         //$book = Book::findOrFail($book);
-        if (is_null($details)) {
+        if (is_null($Category)) {
             return response()->json(['mensagem' => ' livro não existe']);
         }
         // Verifica se o registro já foi excluído logicamente (soft delete)
-        if ($details->is_delete == 0) {
+        if ($Category->is_delete == 0) {
             // Se já foi deletado logicamente, deletar permanentemente
-            $details->is_delete = 1;
+            $Category->is_delete = 1;
         } else {
             // Se ainda não foi deletado logicamente, realizar soft delete
-            $details->is_delete = 0;
+            $Category->is_delete = 0;
         }
 
-        $details->save();
+        $Category->save();
 
-        return $details;
+        return $Category;
     }
-    public function update($details, $data)
+    public function update($Category, $data)
     {
         //dd(array_merge($data, ["id" => $id]));
         
-        if (is_null($details)) {
+        if (is_null($Category)) {
             return response()->json(['mensagem' => ' detalhes não existe']);
         }
-        return $details->update($data);
+        return $Category->update($data);
     }
 }

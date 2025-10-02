@@ -1,7 +1,11 @@
 <?php
 
+use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DetailsController;
+use App\Http\Controllers\ImportController;
+use App\Http\Controllers\PublisherController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -28,3 +32,11 @@ Route::delete('/books/{id}', [BookController::class, 'destroy']);  // Excluir um
  */
 Route::resource('books',BookController::class); 
 Route::resource('details',DetailsController::class); 
+Route::resource('category',CategoryController::class); 
+Route::resource('author',AuthorController::class); 
+Route::resource('publisher',PublisherController::class); 
+Route::resource('import',ImportController::class); 
+
+
+
+

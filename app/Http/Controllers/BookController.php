@@ -1,10 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Services\ServiceBook;
-use App\Services\ServiceCategoryBook;
 use Illuminate\Http\Request;
+use App\Notifications\BookCreateNotification;
+use Illuminate\Support\Facades\Notification;
 
 class BookController extends Controller
 {
@@ -36,7 +36,6 @@ class BookController extends Controller
 
         // Teste para ver o conteúdo da variável $categories
         $categories = $request->input('category');
-
         // Chama o serviço para criar o livro
         $book = $this->bookService->createBook($data);
         if ($book) {
@@ -44,6 +43,11 @@ class BookController extends Controller
                 // Verifique o conteúdo de $categories
 
                 $book->category()->attach($categories);
+               
+                if ($book) {
+                    Notification::route('mail', 'crusophpdma@gmail.com')
+                        ->notify(new BookCreateNotification($book));
+                }
             }
 
             return response()->json(['message' => 'Livro criado com sucesso'], 201);  // HTTP 201: Created
@@ -59,7 +63,7 @@ class BookController extends Controller
     public function update($id, Request $request)
     {
         $book = $this->bookService->findBookById($id);
-        
+
         if (!$book) {
             return response()->json(['message' => 'Livro não encontrado'], 404);  // HTTP 404: Not Found
         }
@@ -81,7 +85,7 @@ class BookController extends Controller
                 // Verifique o conteúdo de $categories
 
                 $book->category()->sync($categories);
-               
+
                 return response()->json($book, 200);
             }
             // HTTP 500: Internal Server Error
@@ -93,7 +97,6 @@ class BookController extends Controller
         $book = $this->bookService->findBookById($book);
         $this->bookService->deleteBook($book);  // Deleta o livro chamando o serviço
         if ($book->is_delete == 0) {
-            
         } else {
             return response()->json(['message' => 'Livro excluido com suceso'], 200);
         }

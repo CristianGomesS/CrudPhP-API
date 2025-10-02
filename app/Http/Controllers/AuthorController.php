@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\ServiceAuthor;
 use Illuminate\Http\Request;
+use App\Http\Requests\AuthorStoreUpdateFormRequest;
 
 class AuthorController extends Controller
 {
@@ -30,9 +31,9 @@ class AuthorController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(AuthorStoreUpdateFormRequest $request)
     {
-        $data = $request->all();
+        $data = $request->validated();
       
         $this->authorService->createAuthor($data);
             return response()->json(['message' => 'Author criada com sucesso'], 201);
@@ -58,7 +59,7 @@ class AuthorController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update($id, Request $request)
+    public function update($id, AuthorStoreUpdateFormRequest $request)
     {
         $author = $this->authorService->findAuthorById($id);
       
@@ -66,9 +67,8 @@ class AuthorController extends Controller
             return response()->json(['message' => 'detalhe não encontrado'], 404);  // HTTP 404: Not Found
         }
      
-        $data = $request->all();
+        $data = $request->validated();
      
-        // Chama o serviço para criar o livrosro
        $this->authorService->updateAuthor($author, $data);
         
         return response()->json($author, 200);

@@ -16,7 +16,8 @@
         <label for="arquivo">Escolha o arquivo CSV:</label>
         <input type="file" name="arquivo" id="arquivo" accept=".csv" required>
 
-        <button type="submit">Carregar Arquivo</button>
+        <br>
+        <button type="submit">Enviar Arquivo</button>
         
     </form>
     

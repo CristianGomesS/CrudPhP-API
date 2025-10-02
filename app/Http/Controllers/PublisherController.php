@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PublisherStoreUpdateFormRequest;
 use App\Services\ServicePublisher;
 use Illuminate\Http\Request;
 
@@ -30,9 +31,9 @@ class PublisherController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(PublisherStoreUpdateFormRequest $request)
     {
-        $data = $request->all();
+        $data = $request->validated();
       
         $this->publisherService->createPublisher($data);
             return response()->json(['message' => 'Author criada com sucesso'], 201);
@@ -58,7 +59,7 @@ class PublisherController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update($id, Request $request)
+    public function update($id, PublisherStoreUpdateFormRequest $request)
     {
         $publisher = $this->publisherService->findPublisherById($id);
       
@@ -66,7 +67,7 @@ class PublisherController extends Controller
             return response()->json(['message' => 'Editora não encontrado'], 404);  // HTTP 404: Not Found
         }
      
-        $data = $request->all();
+        $data = $request->validated();
      
         // Chama o serviço para criar o livrosro
        $this->publisherService->updatePublisher($publisher, $data);

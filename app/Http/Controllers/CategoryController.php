@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CategoryStoreUpdateFormRequest;
 use App\Services\ServiceCategory;
 use Illuminate\Http\Request;
 
@@ -30,9 +31,9 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CategoryStoreUpdateFormRequest $request)
     {
-        $data = $request->all();
+        $data = $request->validated();
       
         $this->categoryService->createCategory($data);
             return response()->json(['message' => 'Categoria criada com sucesso'], 201);
@@ -58,7 +59,7 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update($id, Request $request)
+    public function update($id, CategoryStoreUpdateFormRequest $request)
     {
         $category = $this->categoryService->findCategoryById($id);
       
@@ -66,9 +67,8 @@ class CategoryController extends Controller
             return response()->json(['message' => 'detalhe não encontrado'], 404);  // HTTP 404: Not Found
         }
      
-        $data = $request->all();
+        $data = $request->validated();
      
-        // Chama o serviço para criar o livrosro
        $this->categoryService->updateCategory($category, $data);
         
         return response()->json($category, 200);

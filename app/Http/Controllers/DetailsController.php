@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BookDetailsStoreUpdateFormRequest;
 use App\Services\ServiceBookDetails;
 use Illuminate\Http\Request;
 
@@ -30,11 +31,11 @@ class DetailsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(BookDetailsStoreUpdateFormRequest $request)
     {
-        $data = $request->all();
-      
-        $this->detailsService->createDetails($data);
+       $request->validated();
+    
+        $this->detailsService->createDetails($request->all());
             return response()->json(['message' => 'Livro criado com sucesso'], 201);
     }
 
@@ -58,17 +59,16 @@ class DetailsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update($id, Request $request)
+    public function update($id, BookDetailsStoreUpdateFormRequest $request)
     {
         $details = $this->detailsService->findDetailsById($id);
       
         if (!$details) {
-            return response()->json(['message' => 'detalhe não encontrado'], 404);  // HTTP 404: Not Found
+            return response()->json(['message' => 'detalhe não encontrado'], 404); 
         }
      
-        $data = $request->all();
+        $data = $request->validated();
      
-        // Chama o serviço para criar o livro
        $this->detailsService->updateDetails($details, $data);
         
         return response()->json($details, 200);

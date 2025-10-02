@@ -24,12 +24,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-/* Route::get('/books', [BookController::class, 'index']);  // Listar todos os livros
-Route::post('/books', [BookController::class, 'store']);  // Criar um novo livro
-Route::get('/books/{id}', [BookController::class, 'show']);  // Mostrar detalhes de um livro específico
-Route::put('/books/{id}', [BookController::class, 'update']);  // Atualizar um livro existente
-Route::delete('/books/{id}', [BookController::class, 'destroy']);  // Excluir um livro
- */
+// Route::get('/books', [BookController::class, 'index']);  // Listar todos os livros
+// Route::post('/books', [BookController::class, 'store']);  // Criar um novo livro
+// Route::get('/books/{id}', [BookController::class, 'show']);  // Mostrar detalhes de um livro específico
+// Route::put('/books/{id}', [BookController::class, 'update']);  // Atualizar um livro existente
+// Route::delete('/books/{id}', [BookController::class, 'destroy']);  // Excluir um livro
+ 
 Route::resource('books',BookController::class); 
 Route::resource('details',DetailsController::class); 
 Route::resource('category',CategoryController::class); 

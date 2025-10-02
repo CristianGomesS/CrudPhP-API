@@ -32,7 +32,6 @@ class BookRepository
 
     public function  create($data)
     {   
-
         return $this->bookModel->create($data);
     }
     public function find($id)
